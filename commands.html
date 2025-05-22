@@ -1,0 +1,1000 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cal+Sans&family=Lexend:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="https://cdn.discordapp.com/emojis/819591496473772112.webp?size=160&animated=true">
+    <title>Patchbot Commands</title>
+    <style>
+        :root {
+            /* Core colors - Original palette */
+            --primary: #f90c9b;
+            --secondary: #50cc90;
+            --bg-dark: #141314;
+            --bg-card: #1c1b1d;
+            --text: #e6e1e3;
+            --text-muted: rgba(230, 225, 227, 0.6);
+
+            /* Keep bouncy transitions */
+            --transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --transition-transform: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            --transition-opacity: opacity 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            
+            --border-radius: 25px;
+            --border-radius-lg: 35px;
+            --border-radius-sm: 16px;
+
+            --shine-timing: 2s;
+
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+            --border-glow: 0 0 10px rgba(249, 12, 155, 0.3);
+
+            --glass-bg: rgba(28, 27, 29, 0.85);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-blur: blur(20px);
+            --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            
+            --grid-size: 50px;
+            --grid-color: rgba(255, 255, 255, 0.03);
+            --gradient-primary: rgba(249, 12, 155, 0.08);
+            --gradient-secondary: rgba(80, 204, 144, 0.08);
+            --gradient-blend: rgba(255, 255, 255, 0.05);
+
+            --shine-opacity: 0.03;
+            --shine-width: 200%;
+
+            /* Scrollbar colors */
+            --scrollbar-track: rgba(28, 27, 29, 0.8);
+            --scrollbar-thumb: rgba(249, 12, 155, 0.3);
+            --scrollbar-thumb-hover: rgba(249, 12, 155, 0.5);
+            
+            /* Selection colors */
+            --selection-bg: rgba(249, 12, 155, 0.3);
+            --selection-text: #ffffff;
+        }
+
+        /* Reset styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Add overflow control to clickable elements */
+        .category-filter, .command-card {
+            position: relative;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            will-change: transform;
+        }
+
+        .category-filter:active {
+            transform: translateY(4px) !important;
+            transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .command-card:active {
+            transform: translateY(4px) scale(0.98) !important;
+            transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Ripple effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            transform: scale(0);
+            animation: ripple-animation 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            pointer-events: none;
+        }
+
+        @keyframes ripple-animation {
+            to {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+
+        /* Selection styles */
+        ::selection {
+            background: var(--selection-bg);
+            color: var(--selection-text);
+        }
+
+        ::-moz-selection {
+            background: var(--selection-bg);
+            color: var(--selection-text);
+        }
+
+        /* Scrollbar styles */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--scrollbar-track);
+            border-radius: 6px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--scrollbar-thumb);
+            border-radius: 6px;
+            border: 3px solid var(--scrollbar-track);
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--scrollbar-thumb-hover);
+        }
+
+        /* Firefox scrollbar styles */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            font-family: 'Lexend', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text);
+            line-height: 1.7;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            margin-top: 20px; /* Reduce top margin from 70px */
+        }
+
+        body::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 15% 15%, var(--gradient-primary), transparent 50%),
+                radial-gradient(circle at 85% 85%, var(--gradient-secondary), transparent 50%);
+            z-index: -2;
+            opacity: 0.8;
+            transition: opacity 1.2s ease;
+            filter: blur(60px);
+        }
+
+        body:hover::before {
+            opacity: 1;
+        }
+
+        .grid-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(to right, var(--grid-color) 0 1px, transparent 1px var(--grid-size)),
+                repeating-linear-gradient(to bottom, var(--grid-color) 0 1px, transparent 1px var(--grid-size));
+            z-index: -1;
+            opacity: 0.7;
+            filter: blur(0.5px);
+            transform: translateZ(0);
+            transform-style: preserve-3d;
+            perspective: 1000px;
+            will-change: transform;
+            transition: transform 0.15s ease-out;  /* Added smooth transition */
+        }
+
+        .container {
+            max-width: 100%;
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 280px;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--glass-border);
+            padding: 30px;
+            height: calc(100vh - 150px); /* Adjusted to be closer to bottom */
+            position: fixed;
+            left: 20px;
+            top: 110px; /* Move down another 10px */
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--glass-shadow);
+            transition: transform 0.3s ease, border-color 0.3s ease;
+            overflow-y: auto;
+            margin-top: 0;
+        }
+
+        .sidebar:hover {
+            transform: translateX(5px) translateY(-5px) scale(1.02); /* Add slight scaling on hover */
+            border-color: var(--primary);
+        }
+
+        .main-content {
+            margin-left: 340px;
+            padding: 40px;
+            flex: 1;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 40px;
+            text-align: center;
+            color: var(--text);
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 4px;
+            bottom: -10px;
+            left: 0;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            animation: slideIn 0.6s ease-out forwards;
+        }
+
+        @keyframes slideIn {
+            0% {
+                width: 0;
+                left: 50%;
+            }
+            100% {
+                width: 100%;
+                left: 0;
+            }
+        }
+
+        /* Command list styles */
+        .commands-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 40px;
+            animation: fadeInUp 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .command-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            cursor: pointer;
+            backdrop-filter: var(--glass-blur);
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform: translateY(0) scale(1);
+            animation: popIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+        }
+
+        .command-card:hover {
+            transform: translateY(-8px) scale(1.03);
+            border-color: var(--primary);
+        }
+        
+        .command-name {
+            color: var(--primary);
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .command-brief {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* Modal styles */
+        .command-modal {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius-lg);
+            padding: 40px;
+            max-width: 600px;
+            width: 90%;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+                        transform 0.1s ease-out;
+            backdrop-filter: var(--glass-blur);
+            box-shadow: var(--glass-shadow);
+            z-index: 1000;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+
+        .command-modal.active {
+            opacity: 1;
+            visibility: visible;
+            transform: translate(-50%, -50%) scale(1) rotateX(0) rotateY(0);
+            animation: modalPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-title {
+            color: var(--primary);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            font-weight: 700;
+        }
+
+        .modal-description {
+            color: var(--text);
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .modal-usage {
+            background: var(--bg-card);
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 5px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+
+        /* Category filters */
+        .category-filters {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 35px;
+            perspective: none;
+        }
+
+        .category-filter {
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            color: var(--text);
+            padding: 12px 20px;
+            border-radius: 12px;
+            text-align: left;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .category-filter:hover {
+            transform: translateX(5px);
+            background: var(--bg-dark);
+            border-color: var(--primary);
+        }
+
+        .category-filter.active {
+            background: var(--primary);
+            color: white;
+            border-color: transparent;
+        }
+
+        /* Search input styles */
+        .search-input {
+            width: 100%;
+            padding: 12px 20px;
+            margin-bottom: 30px;
+            background: var(--bg-card);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--border-radius);
+            color: var(--text);
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: var(--border-glow);
+        }
+
+        /* Animation keyframes */
+        @keyframes popIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes modalPop {
+            0% {
+                transform: translate(-50%, -50%) scale(0.8);
+            }
+            60% {
+                transform: translate(-50%, -50%) scale(1.02);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        /* Navbar styles */
+        .navbar {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            padding: 8px;
+            z-index: 1000;
+            display: flex;
+            gap: 8px;
+            backdrop-filter: var(--glass-blur);
+            box-shadow: var(--glass-shadow);
+            border-radius: 100px;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .navbar:hover {
+            border-color: var(--primary);
+            box-shadow: 0 8px 32px rgba(249, 12, 155, 0.15);
+            transform: translateX(-50%) translateY(-2px);
+        }
+
+        .navbar-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text);
+            text-decoration: none;
+            font-size: 1.1rem;
+            font-weight: 500;
+            padding: 10px 20px;
+            border-radius: 100px;
+            transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            background: var(--glass-bg);
+            isolation: isolate;
+        }
+
+        .navbar-link svg {
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .navbar-link:hover svg {
+            transform: scale(1.2) rotate(5deg);
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .navbar-link.active svg {
+            transform: scale(1.1);
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+        }
+
+        .navbar-link::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 100px;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .navbar-link::after {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            background: var(--glass-bg);
+            border-radius: 100px;
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-link:hover {
+            color: var(--text);
+            transform: translateY(-2px);
+        }
+
+        .navbar-link:hover::before {
+            opacity: 1;
+        }
+
+        .navbar-link.active {
+            color: var(--text);
+        }
+
+        .navbar-link.active::before {
+            opacity: 1;
+        }
+
+        .navbar-link.active::after {
+            background: var(--glass-bg);
+        }
+        </style>
+    </head>
+    <body>
+        <nav class="navbar">
+            <a href="index.html" class="navbar-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                Home
+            </a>
+            <a href="commands.html" class="navbar-link active">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <path d="M14 2v6h6"/>
+                    <line x1="8" y1="12" x2="16" y2="12"/>
+                    <line x1="8" y1="16" x2="16" y2="16"/>
+                </svg>
+                Docs
+            </a>
+            <a href="contact.html" class="navbar-link">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/>
+                </svg>
+                Contact
+            </a>
+        </nav>
+        <div class="grid-background"></div>
+        <div class="container">
+            <div class="sidebar">
+                <input type="text" class="search-input" placeholder="Search commands...">
+                <div class="category-filters">
+                    <button class="category-filter active" data-category="all">All</button>
+                    <button class="category-filter" data-category="utility">Utility</button>
+                    <button class="category-filter" data-category="fun">Fun</button>
+                    <button class="category-filter" data-category="moderation">Moderation</button>
+                </div>
+            </div>
+            <div class="main-content">
+                <div class="commands-grid">
+                    <!-- Commands will be dynamically inserted here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-overlay"></div>
+        <div class="command-modal">
+            <button class="modal-close">✕</button>
+            <h2 class="modal-title"></h2>
+            <div class="modal-description"></div>
+            <div class="modal-usage"></div>
+        </div>
+
+        <script>
+            // Command data
+            const commands = [
+                {
+                    name: "!ai",
+                    category: "fun",
+                    brief: "Talk to Patchbot using AI",
+                    description: "Have a conversation with Patchbot using the Gemini 1.5 Flash AI model.",
+                    usage: "!ai <your message>"
+                },
+                {
+                    name: "!tts",
+                    category: "utility",
+                    brief: "Text-to-speech in voice chat",
+                    description: "Convert text to speech and play it in your current voice channel.",
+                    usage: "!tts <your message>"
+                },
+                {
+                    name: "!rwiki",
+                    category: "fun",
+                    brief: "Get a random Wikipedia article",
+                    description: "Fetches a random Wikipedia article and provides a summary in an embed.",
+                    usage: "!rwiki"
+                },
+                {
+                    name: "!join",
+                    category: "utility",
+                    brief: "Joins the voice channel you're currently in",
+                    description: "Checks if you're in a voice channel and joins it.",
+                    usage: "!join"
+                },
+                {
+                    name: "!leave",
+                    category: "utility",
+                    brief: "Leaves the voice channel",
+                    description: "Checks if Patchbot is in a voice channel and leaves it.",
+                    usage: "!leave"
+                },
+                {
+                    name: "!speak",
+                    category: "utility",
+                    brief: "Speaks the given text",
+                    description: "Patchbot will say the given text using TTS in the voice channel he's in.",
+                    usage: "!speak <text>"
+                },
+                {
+                    name: "!wheeladd",
+                    category: "fun",
+                    brief: "Adds an entry to the wheel",
+                    description: "Adds an entry to the wheel.txt file.",
+                    usage: "!wheeladd <entry>"
+                },
+                {
+                    name: "!shutup",
+                    category: "utility",
+                    brief: "Stops Patchbot from talking",
+                    description: "Stops Patchbot from speaking if he's currently saying something.",
+                    usage: "!leave"
+                },
+                {
+                    name: "!fart",
+                    category: "fun",
+                    brief: "Plays a fart sound",
+                    description: "Plays a fart sound in the current voice channel.",
+                    usage: "!fart <number>"
+                },
+                {
+                    name: "!waifu",
+                    category: "fun",
+                    brief: "Sends a random waifu image",
+                    description: "Fetches a random waifu image from an API.",
+                    usage: "!waifu"
+                },
+                {
+                    name: "!husbando",
+                    category: "fun",
+                    brief: "Sends a random husbando image",
+                    description: "Fetches a random husbando image from an API.",
+                    usage: "!waifu"
+                },
+                {
+                    name: "!husbando",
+                    category: "fun",
+                    brief: "Sends a random husbando image",
+                    description: "Fetches a random husbando image from an API.",
+                    usage: "!waifu"
+                },
+                {
+                    name: "!catfact",
+                    category: "fun",
+                    brief: "Sends a random cat fact",
+                    description: "Sends a random cat fact accompanied by a cute cat image.",
+                    usage: "!catfact"
+                },
+                {
+                    name: "!cat",
+                    category: "fun",
+                    brief: "Sends a random cat",
+                    description: "Sends a random cat image.",
+                    usage: "!cat"
+                },
+                {
+                    name: "!wii",
+                    category: "fun",
+                    brief: "Checks if the Wii is out yet",
+                    description: "Nothing much else to say.",
+                    usage: "!wii"
+                },
+                {
+                    name: "!man",
+                    category: "fun",
+                    brief: "Man...",
+                    description: "Man...",
+                    usage: "!man"
+                },
+                {
+                    name: "!hyrule",
+                    category: "fun",
+                    brief: "Info from the Hyrule Compendium",
+                    description: "Fetches an entry from the Hyrule Compendium based off of user input.",
+                    usage: "!hyrule <entry>"
+                },
+                {
+                    name: "!amiibo",
+                    category: "fun",
+                    brief: "Fetches a random amiibo",
+                    description: "Gives you a random amiibo from the amiibo API, along with some info.",
+                    usage: "!amiibo"
+                },
+                {
+                    name: "!consequence",
+                    category: "utility",
+                    brief: "Sends a consequence",
+                    description: "Sends a consequence to the user inputted.",
+                    usage: "!consequence <user>"
+                },
+                {
+                    name: "!gambl",
+                    category: "fun",
+                    brief: "Gamble with Patchbot",
+                    description: "Sends a random entry from wheel.txt.",
+                    usage: "!gambl"
+                },
+                {
+                    name: "!bonk",
+                    category: "fun",
+                    brief: "Bonks you",
+                    description: "Bonks you, and adds one bonk to your total on the leaderboard.",
+                    usage: "!bonk"
+                },
+                {
+                    name: "!bonkl",
+                    category: "fun",
+                    brief: "Bonk leaderboard",
+                    description: "Shows the global bonk leaderboard.",
+                    usage: "!bonkl"
+                },
+                {
+                    name: "!pickle",
+                    category: "fun",
+                    brief: "Pickle",
+                    description: "Pickle delivery.",
+                    usage: "!pickle"
+                },
+                {
+                    name: "!insult",
+                    category: "fun",
+                    brief: "Insults you",
+                    description: "Sends a random insult. (These can be kind of offensive, so be careful.)",
+                    usage: "!insult"
+                },
+                {
+                    name: "!poke",
+                    category: "fun",
+                    brief: "Sends a random pokemon",
+                    description: "Sends a random pokemon from the PokeAPI, accompanied with some info and stats.",
+                    usage: "!poke"
+                },
+                {
+                    name: "!leaderboard",
+                    category: "utility",
+                    brief: "Speedrun.com leaderboard",
+                    description: "Fetches the top 10 runs for the inputted game.",
+                    usage: "!leaderboard <game>"
+                },
+                {
+                    name: "!wr",
+                    category: "utility",
+                    brief: "Speedrun.com world record",
+                    description: "Fetches the world record for the inputted game.",
+                    usage: "!wr <game>"
+                },
+                {
+                    name: "!play",
+                    category: "utility",
+                    brief: "Play music from SoundCloud",
+                    description: "Play any song from SoundCloud in the current voice channel.",
+                    usage: "!play <song name>"
+                },
+                {
+                    name: "!user",
+                    category: "utility",
+                    brief: "Speedrun.com user info",
+                    description: "Fetches the inputted user's info from speedrun.com.",
+                    usage: "!user <username>"
+                },
+                {
+                    name: "!ralsei",
+                    category: "fun",
+                    brief: "Sends a random Ralsei gif",
+                    description: "Fetches a random Ralsei gif from the Tenor API.",
+                    usage: "!ralsei"
+                },
+                {
+                    name: "!rgif",
+                    category: "fun",
+                    brief: "Get a random GIF",
+                    description: "Fetches a random GIF using the Tenor API and random words.",
+                    usage: "!rgif"
+                }
+                // Add more commands as needed
+            ];
+
+            // Initialize commands
+            function initializeCommands() {
+                const grid = document.querySelector('.commands-grid');
+                commands.forEach(command => {
+                    const card = createCommandCard(command);
+                    grid.appendChild(card);
+                });
+            }
+
+            // Create command card
+            function createCommandCard(command) {
+                const card = document.createElement('div');
+                card.className = `command-card ${command.category}`;
+                card.style.animationDelay = `${Math.random() * 0.5}s`;
+                card.innerHTML = `
+                    <div class="command-name">${command.name}</div>
+                    <div class="command-brief">${command.brief}</div>
+                `;
+                card.addEventListener('click', () => showCommandModal(command));
+                card.addEventListener('mousedown', createRipple);
+                return card;
+            }
+
+            // Modal functionality
+            const modal = document.querySelector('.command-modal');
+            const overlay = document.querySelector('.modal-overlay');
+            const closeBtn = document.querySelector('.modal-close');
+
+            function showCommandModal(command) {
+                modal.querySelector('.modal-title').textContent = command.name;
+                modal.querySelector('.modal-description').textContent = command.description;
+                modal.querySelector('.modal-usage').textContent = `Usage: ${command.usage}`;
+                modal.classList.add('active');
+                overlay.classList.add('active');
+            }
+
+            function closeModal() {
+                modal.classList.remove('active');
+                overlay.classList.remove('active');
+            }
+
+            closeBtn.addEventListener('click', closeModal);
+            overlay.addEventListener('click', closeModal);
+
+            // Category filtering
+            const categoryFilters = document.querySelectorAll('.category-filter');
+            categoryFilters.forEach(filter => {
+                filter.addEventListener('click', () => {
+                    // Update active state
+                    categoryFilters.forEach(f => f.classList.remove('active'));
+                    filter.classList.add('active');
+
+                    // Filter commands
+                    const category = filter.dataset.category;
+                    const cards = document.querySelectorAll('.command-card');
+                    cards.forEach(card => {
+                        if (category === 'all' || card.classList.contains(category)) {
+                            card.style.display = 'block';
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Add search functionality
+            const searchInput = document.querySelector('.search-input');
+            
+            function filterCommands() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const activeCategory = document.querySelector('.category-filter.active').dataset.category;
+                const cards = document.querySelectorAll('.command-card');
+                
+                cards.forEach(card => {
+                    const command = commands.find(cmd => cmd.name === card.querySelector('.command-name').textContent);
+                    const matchesSearch = command.name.toLowerCase().includes(searchTerm) || 
+                                       command.brief.toLowerCase().includes(searchTerm) ||
+                                       command.description.toLowerCase().includes(searchTerm);
+                    const matchesCategory = activeCategory === 'all' || command.category === activeCategory;
+                    
+                    card.style.display = matchesSearch && matchesCategory ? 'block' : 'none';
+                });
+            }
+
+            searchInput.addEventListener('input', filterCommands);
+
+            // Update category filter click handler
+            categoryFilters.forEach(filter => {
+                filter.addEventListener('click', () => {
+                    categoryFilters.forEach(f => f.classList.remove('active'));
+                    filter.classList.add('active');
+                    filterCommands();
+                });
+            });
+
+            // Add animation delays to category filters
+            document.querySelectorAll('.category-filter').forEach((filter, index) => {
+                filter.style.animationDelay = `${index * 0.1}s`;
+            });
+
+            // Add ripple effect function
+            function createRipple(event) {
+                const element = event.currentTarget;
+                const ripple = document.createElement('span');
+                const rect = element.getBoundingClientRect();
+                
+                const size = Math.max(rect.width, rect.height);
+                const diameter = size * 2;
+                
+                ripple.style.width = ripple.style.height = `${diameter}px`;
+                ripple.style.left = `${event.clientX - rect.left - (diameter / 2)}px`;
+                ripple.style.top = `${event.clientY - rect.top - (diameter / 2)}px`;
+                
+                ripple.classList.add('ripple');
+                
+                // Remove any existing ripples
+                const existingRipple = element.querySelector('.ripple');
+                if (existingRipple) {
+                    existingRipple.remove();
+                }
+                
+                element.appendChild(ripple);
+                
+                // Remove ripple after animation
+                ripple.addEventListener('animationend', () => {
+                    ripple.remove();
+                });
+            }
+
+            // Add ripple to category filters
+            document.querySelectorAll('.category-filter').forEach(button => {
+                button.addEventListener('mousedown', createRipple);
+            });
+
+            // Initialize
+            initializeCommands();
+        </script>
+    </body>
+</html>
