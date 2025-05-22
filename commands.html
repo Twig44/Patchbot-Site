@@ -583,7 +583,61 @@
         .navbar-link.active::after {
             background: var(--glass-bg);
         }
-        </style>
+
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;  /* Stack sidebar and content */
+                padding: 0;
+            }
+
+            .sidebar {
+                position: static;
+                width: 100%;
+                height: auto;
+                margin: 70px 0 20px 0;
+                padding: 20px;
+                border-radius: var(--border-radius);
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .commands-grid {
+                grid-template-columns: 1fr;  /* Single column on mobile */
+                gap: 15px;
+            }
+
+            .command-card {
+                padding: 15px;
+            }
+
+            .category-filters {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                gap: 8px;
+            }
+
+            .category-filter {
+                flex: 1;
+                min-width: calc(50% - 8px);  /* Two columns for filters */
+                padding: 10px;
+                font-size: 0.9rem;
+                text-align: center;
+            }
+
+            .command-modal {
+                width: 95%;
+                padding: 25px;
+            }
+
+            .modal-title {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
     </head>
     <body>
         <nav class="navbar">
