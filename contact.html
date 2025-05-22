@@ -843,25 +843,56 @@
         }
 
         @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+            }
+
             .logo {
-                font-size: 4rem;
+                font-size: 3.5rem;
             }
-            
+
             .tagline {
-                font-size: 1.4rem;
+                font-size: 1.2rem;
+                padding: 0 20px;
             }
-            
-            .card {
-                padding: 40px 30px;
+
+            .contact-section {
+                padding: 20px;
             }
-            
-            .quote {
-                padding: 40px 30px;
-                font-size: 1.1rem;
+
+            .contact-options {
+                flex-direction: column;
+                gap: 20px;
+                padding: 0 10px;
             }
-            
-            .status-modal {
-                width: 280px;
+
+            .contact-card {
+                width: 100%;
+                max-width: none;
+                min-width: 0;
+                padding: 30px 20px;
+            }
+
+            .contact-icon {
+                font-size: 2rem;
+            }
+
+            .contact-title {
+                font-size: 1.2rem;
+            }
+
+            .contact-description {
+                font-size: 0.9rem;
+            }
+
+            /* Improved touch targets */
+            .contact-card {
+                margin-bottom: 5px;  /* Add space between cards */
+                transform: none;     /* Remove default transform */
+            }
+
+            .contact-card:active {
+                transform: scale(0.98);  /* Subtle press effect */
             }
         }
 
@@ -1094,6 +1125,13 @@
                         </div>
                         <h3 class="contact-title">GitHub</h3>
                         <p class="contact-description">Check out my other open source projects!</p>
+                    </div>
+                    <div class="contact-card" onclick="window.open('mailto:your@email.com')">
+                        <div class="contact-icon">
+                            <img src="https://cdn.discordapp.com/emojis/772249975350231060.webp?size=160&animated=true" alt="Email" class="discord-emoji-large">
+                        </div>
+                        <h3 class="contact-title">Email Us</h3>
+                        <p class="contact-description">Send us your questions or feedback</p>
                     </div>
                 </div>
             </div>
