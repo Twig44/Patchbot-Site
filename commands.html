@@ -10,7 +10,7 @@
     <title>Patchbot Commands</title>
     <style>
         :root {
-            /* Core colors - Original palette */
+             
             --primary: #f90c9b;
             --secondary: #50cc90;
             --bg-dark: #141314;
@@ -18,7 +18,7 @@
             --text: #e6e1e3;
             --text-muted: rgba(230, 225, 227, 0.6);
 
-            /* Keep bouncy transitions */
+             
             --transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             --transition-transform: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
             --transition-opacity: opacity 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
@@ -46,24 +46,24 @@
             --shine-opacity: 0.03;
             --shine-width: 200%;
 
-            /* Scrollbar colors */
+             
             --scrollbar-track: rgba(28, 27, 29, 0.8);
             --scrollbar-thumb: rgba(249, 12, 155, 0.3);
             --scrollbar-thumb-hover: rgba(249, 12, 155, 0.5);
             
-            /* Selection colors */
+             
             --selection-bg: rgba(249, 12, 155, 0.3);
             --selection-text: #ffffff;
         }
 
-        /* Reset styles */
+         
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* Add overflow control to clickable elements */
+         
         .category-filter, .command-card {
             position: relative;
             overflow: hidden;
@@ -82,7 +82,7 @@
             transition: transform 0.1s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        /* Ripple effect */
+         
         .ripple {
             position: absolute;
             border-radius: 50%;
@@ -99,7 +99,7 @@
             }
         }
 
-        /* Selection styles */
+         
         ::selection {
             background: var(--selection-bg);
             color: var(--selection-text);
@@ -110,7 +110,7 @@
             color: var(--selection-text);
         }
 
-        /* Scrollbar styles */
+         
         ::-webkit-scrollbar {
             width: 12px;
         }
@@ -130,7 +130,7 @@
             background: var(--scrollbar-thumb-hover);
         }
 
-        /* Firefox scrollbar styles */
+         
         * {
             scrollbar-width: thin;
             scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
@@ -151,7 +151,7 @@
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
             text-rendering: optimizeLegibility;
-            margin-top: 20px; /* Reduce top margin from 70px */
+            margin-top: 20px;  
         }
 
         body::before {
@@ -190,7 +190,7 @@
             transform-style: preserve-3d;
             perspective: 1000px;
             will-change: transform;
-            transition: transform 0.15s ease-out;  /* Added smooth transition */
+            transition: transform 0.15s ease-out;   
         }
 
         .container {
@@ -208,10 +208,10 @@
             backdrop-filter: var(--glass-blur);
             border: 1px solid var(--glass-border);
             padding: 30px;
-            height: calc(100vh - 150px); /* Adjusted to be closer to bottom */
+            height: calc(100vh - 150px);  
             position: fixed;
             left: 20px;
-            top: 110px; /* Move down another 10px */
+            top: 110px;  
             border-radius: var(--border-radius-lg);
             box-shadow: var(--glass-shadow);
             transition: transform 0.3s ease, border-color 0.3s ease;
@@ -220,7 +220,7 @@
         }
 
         .sidebar:hover {
-            transform: translateX(5px) translateY(-5px) scale(1.02); /* Add slight scaling on hover */
+            transform: translateX(5px) translateY(-5px) scale(1.02);  
             border-color: var(--primary);
         }
 
@@ -260,7 +260,7 @@
             }
         }
 
-        /* Command list styles */
+         
         .commands-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -299,7 +299,7 @@
             line-height: 1.5;
         }
 
-        /* Modal styles */
+         
         .command-modal {
             position: fixed;
             top: 50%;
@@ -384,7 +384,7 @@
             transform: rotate(90deg);
         }
 
-        /* Category filters */
+         
         .category-filters {
             display: flex;
             flex-direction: column;
@@ -416,7 +416,7 @@
             border-color: transparent;
         }
 
-        /* Search input styles */
+         
         .search-input {
             width: 100%;
             padding: 12px 20px;
@@ -436,7 +436,7 @@
             box-shadow: var(--border-glow);
         }
 
-        /* Animation keyframes */
+         
         @keyframes popIn {
             0% {
                 opacity: 0;
@@ -488,7 +488,7 @@
             }
         }
 
-        /* Navbar styles */
+         
         .navbar {
             position: fixed;
             top: 20px;
@@ -586,7 +586,7 @@
 
         @media (max-width: 768px) {
             .container {
-                flex-direction: column;  /* Stack sidebar and content */
+                flex-direction: column;   
                 padding: 0;
             }
 
@@ -605,7 +605,7 @@
             }
 
             .commands-grid {
-                grid-template-columns: 1fr;  /* Single column on mobile */
+                grid-template-columns: 1fr;   
                 gap: 15px;
             }
 
@@ -622,7 +622,7 @@
 
             .category-filter {
                 flex: 1;
-                min-width: calc(50% - 8px);  /* Two columns for filters */
+                min-width: calc(50% - 8px);   
                 padding: 10px;
                 font-size: 0.9rem;
                 text-align: center;
@@ -677,7 +677,6 @@
             </div>
             <div class="main-content">
                 <div class="commands-grid">
-                    <!-- Commands will be dynamically inserted here -->
                 </div>
             </div>
         </div>
@@ -691,7 +690,7 @@
         </div>
 
         <script>
-            // Command data
+             
             const commands = [
                 {
                     name: "!ai",
@@ -910,10 +909,10 @@
                     description: "Fetches a random GIF using the Tenor API and random words.",
                     usage: "!rgif"
                 }
-                // Add more commands as needed
+                 
             ];
 
-            // Initialize commands
+             
             function initializeCommands() {
                 const grid = document.querySelector('.commands-grid');
                 commands.forEach(command => {
@@ -922,7 +921,7 @@
                 });
             }
 
-            // Create command card
+             
             function createCommandCard(command) {
                 const card = document.createElement('div');
                 card.className = `command-card ${command.category}`;
@@ -936,7 +935,7 @@
                 return card;
             }
 
-            // Modal functionality
+             
             const modal = document.querySelector('.command-modal');
             const overlay = document.querySelector('.modal-overlay');
             const closeBtn = document.querySelector('.modal-close');
@@ -957,15 +956,15 @@
             closeBtn.addEventListener('click', closeModal);
             overlay.addEventListener('click', closeModal);
 
-            // Category filtering
+             
             const categoryFilters = document.querySelectorAll('.category-filter');
             categoryFilters.forEach(filter => {
                 filter.addEventListener('click', () => {
-                    // Update active state
+                     
                     categoryFilters.forEach(f => f.classList.remove('active'));
                     filter.classList.add('active');
 
-                    // Filter commands
+                     
                     const category = filter.dataset.category;
                     const cards = document.querySelectorAll('.command-card');
                     cards.forEach(card => {
@@ -978,7 +977,7 @@
                 });
             });
 
-            // Add search functionality
+             
             const searchInput = document.querySelector('.search-input');
             
             function filterCommands() {
@@ -999,7 +998,7 @@
 
             searchInput.addEventListener('input', filterCommands);
 
-            // Update category filter click handler
+             
             categoryFilters.forEach(filter => {
                 filter.addEventListener('click', () => {
                     categoryFilters.forEach(f => f.classList.remove('active'));
@@ -1008,12 +1007,12 @@
                 });
             });
 
-            // Add animation delays to category filters
+             
             document.querySelectorAll('.category-filter').forEach((filter, index) => {
                 filter.style.animationDelay = `${index * 0.1}s`;
             });
 
-            // Add ripple effect function
+             
             function createRipple(event) {
                 const element = event.currentTarget;
                 const ripple = document.createElement('span');
@@ -1028,7 +1027,7 @@
                 
                 ripple.classList.add('ripple');
                 
-                // Remove any existing ripples
+                 
                 const existingRipple = element.querySelector('.ripple');
                 if (existingRipple) {
                     existingRipple.remove();
@@ -1036,18 +1035,18 @@
                 
                 element.appendChild(ripple);
                 
-                // Remove ripple after animation
+                 
                 ripple.addEventListener('animationend', () => {
                     ripple.remove();
                 });
             }
 
-            // Add ripple to category filters
+             
             document.querySelectorAll('.category-filter').forEach(button => {
                 button.addEventListener('mousedown', createRipple);
             });
 
-            // Initialize
+             
             initializeCommands();
         </script>
     </body>
